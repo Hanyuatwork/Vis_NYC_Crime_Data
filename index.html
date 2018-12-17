@@ -2,7 +2,7 @@
 <html>
 
   <head>
-    <title>Change source | CARTO</title>
+    <title>NYPD Shooting Incident Data</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Open+Sans:300,400,600" rel="stylesheet">
@@ -19,31 +19,44 @@
     <aside class="toolbox">
       <div class="box">
         <header>
-          <h1>Change the source</h1>
-          <button class="github-logo js-source-link"></button>
+          <h1>NYPD Shooting Incident Data
+</h1>
+
         </header>
         <section>
-          <p class="description open-sans">Update the source of your layers.</p>
+          
           <div class="separator"></div>
           <section class="usage">
             <header>USAGE</header>
-            <p class="open-sans">Select different sources</p>
+            <p class="open-sans">Select different year</p>
           </section>
 
           <div id="controls">
             <ul>
-              <li onclick="setAllCities()">
+              <li onclick="setAllDatas()">
                 <input type="radio" name="source" checked id="all">
-                <label for="all">All cities</label>
+                <label for="all">All Datas</label>
               </li>
-              <li onclick="setEuropeanCities()">
+              <li onclick="set2017()">
                 <input type="radio" name="source" id="europe">
-                <label for="europe">European cities</label>
+                <label for="europe">2017</label>
               </li>
-              <li onclick="setSpanishCities()">
+              <li onclick="set2016()">
                 <input type="radio" name="source" id="spain">
-                <label for="spain">Spanish cities</label>
+                <label for="spain">2016</label>
               </li>
+              <li onclick="set2015()">
+                <input type="radio" name="source" id="europe">
+                <label for="europe">2015</label>
+              </li>
+              <li onclick="set2014()">
+                <input type="radio" name="source" id="spain">
+                <label for="spain">2014</label>
+              </li>
+              <li onclick="set2013()">
+                <input type="radio" name="source" id="europe">
+                <label for="europe">2013</label>
+ <!-- <li> list of item -->
             </ul>
           </div>
 
@@ -52,12 +65,14 @@
       </div>
     </aside>
     <script>
+    //li
+    
     let center = [40.7, -73.975],
   cusp = [40.692908, -73.9896452];
 
 const map = L.map('map', {
   center: center,
-  zoom: 12
+  zoom: 13
 });
 map.scrollWheelZoom.disable();
 
@@ -121,26 +136,35 @@ layer.on('featureClicked', openPopup);
 
 
 
-function setAllCities() {
-  source.setQuery('SELECT * FROM ne_10m_populated_places_simple');
+function setAllDatas() {
+  source.setQuery('SELECT * FROM nypd_shooting_incident_data');
 }
 
-function setEuropeanCities() {
+function set2017() {
   source.setQuery(`
-          SELECT *
-            FROM ne_10m_populated_places_simple
-            WHERE adm0name IN (SELECT admin FROM ne_adm0_europe)
+         SELECT * FROM nypd_shooting_incident_data where cartodb_id <= '969'
         `);
 }
-
-function setSpanishCities() {
+function set2016() {
   source.setQuery(`
-          SELECT *
-            FROM ne_10m_populated_places_simple
-            WHERE adm0name = \'Spain\'
+         SELECT * FROM nypd_shooting_incident_data where cartodb_id > '969' and cartodb_id <= '2175'
         `);
 }
-
+function set2015() {
+  source.setQuery(`
+          SELECT * FROM nypd_shooting_incident_data where cartodb_id > '2175' and cartodb_id <= '3609'
+        `);
+}
+function set2014() {
+  source.setQuery(`
+        SELECT * FROM nypd_shooting_incident_data where cartodb_id > '3609' and cartodb_id <= '5068'
+        `);
+}
+function set2013() {
+  source.setQuery(`
+       SELECT * FROM nypd_shooting_incident_data where cartodb_id > '6068' 
+        `);
+}
     </script>
 
   </body>

@@ -2,7 +2,7 @@
 <html>
 
   <head>
-    <title>NYPD Shooting Incident Data</title>
+    <title>NYPD Crime Data</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Open+Sans:300,400,600" rel="stylesheet">
@@ -125,7 +125,7 @@ const style = new carto.style.CartoCSS(`
       
 
 const layer = new carto.layer.Layer(source, style, {
-  featureOverColumns: ['precinct']
+  featureOverColumns: ['precinct','cmplnt_fr_dt','pd_desc']
 });
 
 client.addLayer(layer);
@@ -141,14 +141,12 @@ function openPopup(featureEvent) {
   let content = '<div class="widget">';
 
   content += `
-<h2 class="h2">${'occur_data:'}</h2>
-<h2 class="h2">${featureEvent.data.occur_date}</h2>
-<h2 class="h2">${'vic_sex:'}</h2>
-<h2 class="h2">${featureEvent.data.vic_sex}</h2> 
-<h2 class="h2">${'vic_race:'}</h2>
-<h2 class="h2">${featureEvent.data.vic_race}</h2> 
+<h2 class="h2">${'Data:'}</h2>
+<h2 class="h2">${featureEvent.data.cmplnt_fr_dt }</h2>
 <h2 class="h2">${'Police precinct:'}</h2>
-<h2 class="h2">${featureEvent.data.precinct}</h2>`;
+<h2 class="h2">${featureEvent.data.precinct}</h2>
+<h2 class="h2">${'Description:'}</h2>
+<h2 class="h2">${featureEvent.data.pd_desc}</h2> `;
 
   content += `</div>`;
 

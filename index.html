@@ -2,7 +2,7 @@
 <html>
 
   <head>
-    <title>NYPD Crime Data</title>
+    <title>NYPD Shooting Incident Data</title>
     <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700|Open+Sans:300,400,600" rel="stylesheet">
@@ -28,40 +28,9 @@
         </header>
         <section>
           
-          <!-- <div class="separator"></div>
-          <section class="usage">
-            <header>USAGE</header>
-            <p class="open-sans">Select different year</p>
-          </section>
+          <div class="separator"></div>
           
-          <div id="controls">
-            <ul>
-              <li onclick="setAllDatas()">
-                <input type="radio" name="source" checked id="all">
-                <label for="all">All Datas</label>
-              </li>
-              <li onclick="set2017()">
-                <input type="radio" name="source" id="2017">
-                <label for="2017">2017</label>
-              </li>
-              <li onclick="set2016()">
-                <input type="radio" name="source" id="2016">
-                <label for="2016">2016</label>
-              </li>
-              <li onclick="set2015()">
-                <input type="radio" name="source" id="2015">
-                <label for="2015">2015</label>
-              </li>
-              <li onclick="set2014()">
-                <input type="radio" name="source" id="2014">
-                <label for="2014">2014</label>
-              </li>
-              <li onclick="set2013()">
-                <input type="radio" name="source" id="2013">
-                <label for="2013">2013</label>
-           <li> list of item
-            </ul>
-          </div> -->
+          
         </section>
         
         <div id="controls">
@@ -85,6 +54,40 @@
             </select>
             <div id="info"></div>
           </div>
+        <div id="controls">
+          
+            <ul>
+              <h2 class="h2">Years</h2>
+              <li onclick="setAllDatas()">
+                <input type="radio" name="source" checked id="all">
+                <label for="all">All Datas</label>
+              </li>
+              <li onclick="set2018()">
+                <input type="radio" name="source" id="2018">
+                <label for="2018">2018</label>
+              </li> <!--01/01/2018 - 06/30/2018 -->
+              <li onclick="set2017()">
+                <input type="radio" name="source" id="2017">
+                <label for="2017">2017</label>
+              </li>
+              <li onclick="set2016()">
+                <input type="radio" name="source" id="2016">
+                <label for="2016">2016</label>
+              </li>
+              <li onclick="set2015()">
+                <input type="radio" name="source" id="2015">
+                <label for="2015">2015</label>
+              </li>
+              <li onclick="set2014()">
+                <input type="radio" name="source" id="2014">
+                <label for="2014">2014</label>
+              </li>
+              <li onclick="setRest()">
+                <input type="radio" name="source" id="Others">
+                <label for="Others">Others</label>
+           <!-- <li> list of item -->
+            </ul>
+          </div> 
         <footer class="js-footer"></footer>
 
       </div>
@@ -164,39 +167,43 @@ function closePopup(featureEvent) {
 layer.on('featureClicked', openPopup);
 
 
-/*
+
 function setAllDatas() {
   source.setQuery('SELECT * FROM nypd_crime_data');
  
 }
 
-function set2017() {
+function set2018() {
   source.setQuery(`
-         SELECT * FROM nypd_crime_data where cartodb_id <= '969'
+         SELECT * FROM nypd_crime_data where cartodb_id <= '2507'
         `);
 }
-function set2016() {
+function set2017() {
   source.setQuery(`
-         SELECT * FROM nypd_crime_data where cartodb_id > '969' and cartodb_id <= '2175'
+         SELECT * FROM nypd_crime_data where cartodb_id > '2507' and cartodb_id <= '7949'
         `);
   
 }
+function set2016() {
+  source.setQuery(`
+          SELECT * FROM nypd_crime_data where cartodb_id > '7949' and cartodb_id <= '12424'
+        `);
+}
 function set2015() {
   source.setQuery(`
-          SELECT * FROM nypd_crime_data where cartodb_id > '2175' and cartodb_id <= '3609'
+        SELECT * FROM nypd_crime_data where cartodb_id > '12424' and cartodb_id <= '16899'
         `);
 }
 function set2014() {
   source.setQuery(`
-        SELECT * FROM nypd_crime_data where cartodb_id > '3609' and cartodb_id <= '5068'
+       SELECT * FROM nypd_crime_data where cartodb_id > '16899' and cartodb_id <= '21376'
         `);
 }
-function set2013() {
+function setRest() {
   source.setQuery(`
-       SELECT * FROM nypd_crime_data where cartodb_id > '6068' 
+       SELECT * FROM nypd_crime_data where cartodb_id > '21376' 
         `);
-}
- */    
+}  
       
       
        const PrecinctDataview = new carto.dataview.Category(source, 'precinct', {

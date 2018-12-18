@@ -66,14 +66,14 @@
         <div id="controls">
             <h2 class="h2">Police Precinct</h2>
             <select class="js-precincts">
-              <option value="">All</option>
+              <option value="">Select</option>
             </select>
             <div id="info"></div>
           </div>
         <div id="controls">
             <h2 class="h3">Boro</h2>
             <select class="js-boros">
-              <option value="">All</option>
+              <option value="">Select</option>
             </select>
             <div id="info"></div>
           </div>
@@ -239,7 +239,7 @@ function set2013() {
       });
 
       BorosDataview.on('dataChanged', data => {
-        const boro = data.categories.map(d => d.name);
+        const boro = data.categories.map(d => d.name).sort();
         refreshWidget1(boro);
       });
 

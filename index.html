@@ -28,12 +28,12 @@
         </header>
         <section>
           
-          <div class="separator"></div>
+          <!-- <div class="separator"></div>
           <section class="usage">
             <header>USAGE</header>
             <p class="open-sans">Select different year</p>
           </section>
-
+          
           <div id="controls">
             <ul>
               <li onclick="setAllDatas()">
@@ -59,20 +59,28 @@
               <li onclick="set2013()">
                 <input type="radio" name="source" id="2013">
                 <label for="2013">2013</label>
- <!-- <li> list of item -->
+           <li> list of item
             </ul>
-          </div>
+          </div> -->
         </section>
+        
         <div id="controls">
-            <h2 class="h2">Police Precinct</h2>
-            <select class="js-precincts">
+            <h2 class="h2">Offense</h2>
+            <select class="js-offense">
               <option value="">Select</option>
             </select>
             <div id="info"></div>
           </div>
         <div id="controls">
-            <h2 class="h3">Boro</h2>
-            <select class="js-boros">
+            <h2 class="h2">Law</h2>
+            <select class="js-laws">
+              <option value="">Select</option>
+            </select>
+            <div id="info"></div>
+          </div>
+        <div id="controls">
+            <h2 class="h2">Police Precinct</h2>
+            <select class="js-precincts">
               <option value="">Select</option>
             </select>
             <div id="info"></div>
@@ -92,7 +100,7 @@ let center = [40.7, -73.975],
 
 const map = L.map('map', {
   center: center,
-  zoom: 13
+  zoom: 12
 });
 map.scrollWheelZoom.disable();
 
@@ -106,7 +114,7 @@ const client = new carto.Client({
 });
       
      
-const source = new carto.source.SQL('SELECT * FROM nypd_shooting_incident_data');
+const source = new carto.source.SQL('SELECT * FROM nypd_crime_data');
 const style = new carto.style.CartoCSS(`
         #layer {
           marker-width: 7;
@@ -117,7 +125,7 @@ const style = new carto.style.CartoCSS(`
       
 
 const layer = new carto.layer.Layer(source, style, {
-  featureOverColumns: ['occur_date', 'vic_sex', 'vic_race', 'precinct']
+  featureOverColumns: ['precinct']
 });
 
 client.addLayer(layer);
@@ -158,38 +166,39 @@ function closePopup(featureEvent) {
 layer.on('featureClicked', openPopup);
 
 
-
+/*
 function setAllDatas() {
-  source.setQuery('SELECT * FROM nypd_shooting_incident_data');
+  source.setQuery('SELECT * FROM nypd_crime_data');
  
 }
 
 function set2017() {
   source.setQuery(`
-         SELECT * FROM nypd_shooting_incident_data where cartodb_id <= '969'
+         SELECT * FROM nypd_crime_data where cartodb_id <= '969'
         `);
 }
 function set2016() {
   source.setQuery(`
-         SELECT * FROM nypd_shooting_incident_data where cartodb_id > '969' and cartodb_id <= '2175'
+         SELECT * FROM nypd_crime_data where cartodb_id > '969' and cartodb_id <= '2175'
         `);
   
 }
 function set2015() {
   source.setQuery(`
-          SELECT * FROM nypd_shooting_incident_data where cartodb_id > '2175' and cartodb_id <= '3609'
+          SELECT * FROM nypd_crime_data where cartodb_id > '2175' and cartodb_id <= '3609'
         `);
 }
 function set2014() {
   source.setQuery(`
-        SELECT * FROM nypd_shooting_incident_data where cartodb_id > '3609' and cartodb_id <= '5068'
+        SELECT * FROM nypd_crime_data where cartodb_id > '3609' and cartodb_id <= '5068'
         `);
 }
 function set2013() {
   source.setQuery(`
-       SELECT * FROM nypd_shooting_incident_data where cartodb_id > '6068' 
+       SELECT * FROM nypd_crime_data where cartodb_id > '6068' 
         `);
 }
+ */    
       
       
        const PrecinctDataview = new carto.dataview.Category(source, 'precinct', {
@@ -225,52 +234,96 @@ function set2013() {
 
       function highlightPrecinct(admin) {
         source.setQuery(`
-          SELECT * FROM nypd_shooting_incident_data where precinct = ${admin}
+          SELECT * FROM nypd_crime_data where precinct = ${admin}
         `);
       }
 
       
       client.addDataview(PrecinctDataview);
-      
-      
-//-------------------------------
-      const BorosDataview = new carto.dataview.Category(source, 'boro', {
+ //-------------------------------     
+ const offensesDataview = new carto.dataview.Category(source, 'ofns_desc', {
         limit: 100
       });
 
-      BorosDataview.on('dataChanged', data => {
-        const boro = data.categories.map(d => d.name).sort();
-        refreshWidget1(boro);
+      offensesDataview.on('dataChanged', data => {
+        const offense = data.categories.map(d => d.name).sort();
+        refreshWidget1(offense);
       });
 
       function refreshWidget1(adminNames) {
         const asideElement = document.querySelector('aside.toolbox');
-        const borosDom = asideElement.querySelector('.js-boros');
-        borosDom.onchange = event => {
+        const offensesDom = asideElement.querySelector('.js-offense');
+        offensesDom.onchange = event => {
           const admin = event.target.value;
-          highlightBoro(admin);
+          highlightoffense(admin);
         };
 
         adminNames.forEach(admin => {
           const option = document.createElement('option');
           option.innerHTML = admin;
           option.value = admin;
-          borosDom.appendChild(option);
+          offensesDom.appendChild(option);
         });
       }
 
-      function highlightBoro(admin) {
+      function highlightoffense(admin) {
         source.setQuery(`
-          SELECT * FROM nypd_shooting_incident_data where boro = '${admin}'
+          SELECT * FROM nypd_crime_data where ofns_desc = '${admin}'
         `);
       }
 
       
-      client.addDataview(BorosDataview);
+      client.addDataview(offensesDataview);     
+//-------------------------------
+      const lawsDataview = new carto.dataview.Category(source, 'law_cat_cd', {
+        limit: 100
+      });
+
+      lawsDataview.on('dataChanged', data => {
+        const law = data.categories.map(d => d.name).sort();
+        refreshWidget2(law);
+      });
+
+      function refreshWidget2(adminNames) {
+        const asideElement1 = document.querySelector('aside.toolbox');
+        const lawsDom = asideElement1.querySelector('.js-laws');
+        lawsDom.onchange = event => {
+          const admin = event.target.value;
+          highlightlaw(admin);
+        };
+
+        adminNames.forEach(admin => {
+          const option = document.createElement('option');
+          option.innerHTML = admin;
+          option.value = admin;
+          lawsDom.appendChild(option);
+        });
+      }
+
+      function highlightlaw(admin) {
+        source.setQuery(`
+          SELECT * FROM nypd_crime_data where law_cat_cd = '${admin}'
+        `);
+      }
+
+      
+      client.addDataview(lawsDataview);
+ //-------------------------------
+      
+      
+      
+      
+      function projectPoint(x, y) {
+    let point = dMap.latLngToLayerPoint(new L.LatLng(y, x));
+    this.stream.point(point.x, point.y);
+  }
+      
+      
       
     </script>
 
   </body>
 
 </html>
+
 

@@ -22,7 +22,7 @@
     <aside class="toolbox">
       <div class="box">
         <header>
-          <h1>NYPD Crime Data
+          <h1>NYPD Shooting Incident Data
 </h1>
 
         </header>
@@ -84,7 +84,7 @@
               </li>
               <li onclick="setRest()">
                 <input type="radio" name="source" id="Others">
-                <label for="Others">Others</label>
+                <label for="Others">Before 2014</label>
            <!-- <li> list of item -->
             </ul>
           </div> 
@@ -175,33 +175,38 @@ function setAllDatas() {
 
 function set2018() {
   source.setQuery(`
-         SELECT * FROM nypd_crime_data where cartodb_id <= '2507'
+         SELECT * FROM nypd_crime_data where cmplnt_fr_dt like '%2018'
         `);
 }
 function set2017() {
   source.setQuery(`
-         SELECT * FROM nypd_crime_data where cartodb_id > '2507' and cartodb_id <= '7949'
+         SELECT * FROM nypd_crime_data where cmplnt_fr_dt like '%2017'
         `);
   
 }
 function set2016() {
   source.setQuery(`
-          SELECT * FROM nypd_crime_data where cartodb_id > '7949' and cartodb_id <= '12424'
+          SELECT * FROM nypd_crime_data where cmplnt_fr_dt like '%2016'
         `);
 }
 function set2015() {
   source.setQuery(`
-        SELECT * FROM nypd_crime_data where cartodb_id > '12424' and cartodb_id <= '16899'
+        SELECT * FROM nypd_crime_data where cmplnt_fr_dt like '%2015'
         `);
 }
 function set2014() {
   source.setQuery(`
-       SELECT * FROM nypd_crime_data where cartodb_id > '16899' and cartodb_id <= '21376'
+       SELECT * FROM nypd_crime_data where cmplnt_fr_dt like '%2014'
         `);
 }
 function setRest() {
   source.setQuery(`
-       SELECT * FROM nypd_crime_data where cartodb_id > '21376' 
+       SELECT * FROM nypd_crime_data where not (
+                cmplnt_fr_dt like '%2018' or 
+                cmplnt_fr_dt like '%2017' or 
+                cmplnt_fr_dt like '%2016' or 
+                cmplnt_fr_dt like '%2015' or 
+                cmplnt_fr_dt like '%2014')
         `);
 }  
       

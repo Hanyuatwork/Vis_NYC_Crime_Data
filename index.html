@@ -249,8 +249,9 @@ function setRest() {
       
       
       function highlightPrecinct(admin) {
+        var a = admin.split(',')
         source.setQuery(`
-          SELECT * FROM nypd_crime_data where precinct = ${admin[0]}
+          SELECT * FROM nypd_crime_data where precinct = ${a}
         `);
       }
 

@@ -215,15 +215,20 @@ function setRest() {
 
       function compareNumbers(a, b)
         {
+            return a - b;
+        }
+      function compareNumbers1(a, b)
+        {
             return a[0] - b[0];
         }
       
       PrecinctDataview.on('dataChanged', data => {
-        const precinct = data.categories.map(d => [d.name,d.value]).sort(compareNumbers);
-        refreshWidget(precinct);
+        const precinct = data.categories.map(d => d.name).sort(compareNumbers);
+        const amount = data.categories.map(d => [d.name,d.value]).sort(compareNumbers1);
+        refreshWidget(amount);
       });
 
-      function refreshWidget(adminNames) {
+      function refreshWidget(adminNames,amount) {
         const asideElement = document.querySelector('aside.toolbox');
         const precinctsDom = asideElement.querySelector('.js-precincts');
         precinctsDom.onchange = event => {
@@ -241,10 +246,11 @@ function setRest() {
           precinctsDom.appendChild(option);
         });
       }
-
+      
+      
       function highlightPrecinct(admin) {
         source.setQuery(`
-          SELECT * FROM nypd_crime_data where precinct = ${admin}
+          SELECT * FROM nypd_crime_data where precinct = ${admin[0]}
         `);
       }
 

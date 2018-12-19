@@ -38,14 +38,12 @@
             <select class="js-offense">
               <option value="">Select</option>
             </select>
-            <div id="info"></div>
           </div>
         <div id="controls">
             <h2 class="h2">Law</h2>
             <select class="js-laws">
               <option value="">Select</option>
             </select>
-            <div id="info"></div>
           </div>
         <div id="controls">
             <h2 class="h2">Police Precinct</h2>
@@ -217,11 +215,11 @@ function setRest() {
 
       function compareNumbers(a, b)
         {
-            return a - b;
+            return a[0] - b[0];
         }
       
       PrecinctDataview.on('dataChanged', data => {
-        const precinct = data.categories.map(d => d.name).sort(compareNumbers);
+        const precinct = data.categories.map(d => [d.name,d.value]).sort(compareNumbers);
         refreshWidget(precinct);
       });
 
@@ -231,12 +229,14 @@ function setRest() {
         precinctsDom.onchange = event => {
           const admin = event.target.value;
           highlightPrecinct(admin);
-          
+          let content = '';
+          content += `<h4>Amount of crime: ${admin}</h4>`;
+          document.getElementById('info').innerHTML = content;
         };
 
         adminNames.forEach(admin => {
           const option = document.createElement('option');
-          option.innerHTML = admin;
+          option.innerHTML = admin[0];
           option.value = admin;
           precinctsDom.appendChild(option);
         });
@@ -254,9 +254,9 @@ function setRest() {
  const offensesDataview = new carto.dataview.Category(source, 'ofns_desc', {
         limit: 100
       });
-
+      var counts;
       offensesDataview.on('dataChanged', data => {
-        const offense = data.categories.map(d => d.name).sort();
+        const offense = data.categories.map(d => [d.name,d.value]).sort();
         refreshWidget1(offense);
       });
 
@@ -335,5 +335,6 @@ function setRest() {
   </body>
 
 </html>
+
 
 
